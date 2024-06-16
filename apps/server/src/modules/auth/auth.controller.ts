@@ -10,6 +10,6 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.login(loginUserDto.username, loginUserDto.password);
+    return this.authService.login(loginUserDto.email, loginUserDto.password);
   }
 }

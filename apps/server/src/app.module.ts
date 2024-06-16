@@ -6,6 +6,8 @@ import { GremlinModule } from './modules/gremlin/gremlin.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { FriendsModule } from './modules/friends/friends.module';
+import { BlogModule } from './modules/blog/blog.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
+    FriendsModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

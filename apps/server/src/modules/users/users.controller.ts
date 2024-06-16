@@ -37,11 +37,13 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
+  @UseGuards(JwtGuard)
   @Get(':id')
   getUserById(@Param('id') id: string) {
     return this.userService.getUserById(+id);
   }
 
+  @UseGuards(JwtGuard)
   @UsePipes(
     new ValidationPipe({
       transform: true,
@@ -54,6 +56,7 @@ export class UsersController {
     return this.userService.updateUser(+id, updateUserDto);
   }
 
+  @UseGuards(JwtGuard)
   @Delete(':id')
   deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(+id);

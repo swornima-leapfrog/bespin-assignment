@@ -9,6 +9,6 @@ import { AuthModule } from '../auth/auth.module';
   imports: [GremlinModule, forwardRef(() => AuthModule)],
   controllers: [UsersController],
   providers: [UsersService, UserRepository],
-  exports: [UsersService],
+  exports: [UsersService, UserRepository],
 })
 export class UsersModule {}

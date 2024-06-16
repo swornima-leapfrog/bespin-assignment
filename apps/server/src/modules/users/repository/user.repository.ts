@@ -1,9 +1,9 @@
-import { GremlinService } from '@/modules/gremlin/gremlin.service';
 import { Injectable } from '@nestjs/common';
+import { GetUserDto } from '../dto/get-user-dto';
 import { CreateUserDto } from '../dto/create-user-dto';
+import { GremlinService } from '@/modules/gremlin/gremlin.service';
 import { UpdateUserDto } from '../dto/update-user-dto';
 import { BaseRepository } from '@/modules/gremlin/base.repository';
-import { GetUserDto } from '../dto/get-user-dto';
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -14,21 +14,21 @@ export class UserRepository extends BaseRepository {
   createUser(createUserDto: CreateUserDto) {
     const g = this.gremlinService.getClient();
 
-    const vertexLabel = g.addV('users');
+    const traversal = g.addV(this.vertexLabel);
 
     Object.entries(createUserDto).forEach(([key, value]) => {
-      vertexLabel.property(key, value);
+      traversal.property(key, value);
     });
 
-    return this.execute<CreateUserDto>(vertexLabel);
+    return this.execute<CreateUserDto>(traversal);
   }
 
   getUsers() {
     const g = this.gremlinService.getClient();
 
-    const vertexLabel = g.V().hasLabel('users');
+    const traversal = g.V().hasLabel(this.vertexLabel);
 
-    const users = this.execute<GetUserDto>(vertexLabel);
+    const users = this.execute<GetUserDto>(traversal);
 
     return users;
   }
@@ -36,9 +36,9 @@ export class UserRepository extends BaseRepository {
   async getUserById(id: number) {
     const g = this.gremlinService.getClient();
 
-    const vertexLabel = g.V(id);
+    const traversal = g.V(id);
 
-    const [user] = await this.execute<GetUserDto>(vertexLabel);
+    const [user] = await this.execute<GetUserDto>(traversal);
 
     return user;
   }
@@ -46,9 +46,9 @@ export class UserRepository extends BaseRepository {
   async getUserByEmail(email: string) {
     const g = this.gremlinService.getClient();
 
-    const vertexLabel = g.V().has('users', 'email', email);
+    const traversal = g.V().has(this.vertexLabel, 'email', email);
 
-    const [user] = await this.execute<GetUserDto>(vertexLabel);
+    const [user] = await this.execute<GetUserDto>(traversal);
 
     return user;
   }
@@ -56,20 +56,20 @@ export class UserRepository extends BaseRepository {
   updateUser(id: number, updateUserDto: UpdateUserDto) {
     const g = this.gremlinService.getClient();
 
-    const vertexLabel = g.V(id);
+    const traversal = g.V(id);
 
     Object.entries(updateUserDto).forEach(([key, value]) => {
-      vertexLabel.property(key, value);
+      traversal.property(key, value);
     });
 
-    return this.execute<UpdateUserDto>(vertexLabel);
+    return this.execute<UpdateUserDto>(traversal);
   }
 
   deleteUser(id: number) {
     const g = this.gremlinService.getClient();
 
-    const vertexLabel = g.V(id).drop();
+    const traversal = g.V(id).drop();
 
-    return this.execute(vertexLabel);
+    return this.execute(traversal);
   }
 }
