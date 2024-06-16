@@ -7,7 +7,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { FriendsModule } from './modules/friends/friends.module';
-import { BlogModule } from './modules/blog/blog.module';
+import { BlogsModule } from './modules/blogs/blogs.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { BlogModule } from './modules/blog/blog.module';
       envFilePath: '.env',
     }),
     FriendsModule,
-    BlogModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
