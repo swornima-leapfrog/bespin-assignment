@@ -4,6 +4,9 @@ import { CreateUserDto } from '../dto/create-user-dto';
 import { GremlinService } from '@/modules/gremlin/gremlin.service';
 import { UpdateUserDto } from '../dto/update-user-dto';
 import { BaseRepository } from '@/modules/gremlin/base.repository';
+import { process } from 'gremlin';
+
+const { statics } = process;
 
 @Injectable()
 export class UserRepository extends BaseRepository {
@@ -73,10 +76,14 @@ export class UserRepository extends BaseRepository {
     return this.execute(traversal);
   }
 
-  searchByUserName(username: string) {
+  searchByUserName(username: string, currentUserId: number) {
     const g = this.gremlinService.getClient();
 
-    const traversal = g.V().has(this.vertexLabel, 'username', username);
+    const traversal = g
+      .V()
+      .has(this.vertexLabel, 'username', username)
+      .where(statics.not(statics.both('isFriendWith').hasId(currentUserId)))
+      .not(statics.hasId(currentUserId));
 
     return this.execute<GetUserDto>(traversal);
   }

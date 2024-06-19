@@ -76,7 +76,7 @@ export class UsersService {
     return { message: `User of id ${id} has been deleted` };
   }
 
-  async searchByUserName(username: string) {
-    return this.userRepository.searchByUserName(username);
+  async searchByUserName(username: string, currentUserId: number) {
+    return this.userRepository.searchByUserName(username, currentUserId);
   }
 }

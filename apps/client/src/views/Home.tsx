@@ -1,14 +1,21 @@
 import Blogs from "./Blogs/Blogs";
 import { getBlogs } from "~/services/blogs";
 import ActionAreaCard from "~/components/Card";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getRecommendations, addFriend } from "~/services/friends";
+import { useQuery } from "@tanstack/react-query";
+import { getRecommendations } from "~/services/friends";
 import { RecommendFriend } from "~/interfaces/friends.interface";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { IconButton, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAddFriend } from "~/hooks/useAddFriend";
 
 function Home() {
-  const queryClient = useQueryClient();
+  const [searchText, setSearchText] = useState("");
+  // const queryClient = useQueryClient();
+  const router = useNavigate();
 
   const { isLoading: isLoadingBlogs, data: blogs } = useQuery({
     queryKey: ["blogs"],
@@ -21,15 +28,7 @@ function Home() {
       queryFn: getRecommendations
     });
 
-  const { mutateAsync: sendFriendRequest } = useMutation({
-    mutationFn: addFriend,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["addFriend"]
-      });
-      queryClient.invalidateQueries({ queryKey: ["recommendations"] });
-    }
-  });
+  const { mutateAsync: sendFriendRequest } = useAddFriend();
 
   const handleClick = async (id: number) => {
     try {
@@ -45,6 +44,24 @@ function Home() {
 
   return (
     <div>
+      <div className=" mt-4 flex justify-end">
+        <TextField
+          variant="outlined"
+          label="Search"
+          size="small"
+          onChange={(event) => {
+            setSearchText(event.target.value);
+          }}
+        />
+        <IconButton
+          onClick={() => {
+            router(`/friends/search/${searchText}`);
+          }}
+          className="!p-0"
+        >
+          <Search className="text-white" />
+        </IconButton>
+      </div>
       <div className="flex gap-8 my-4">
         <div className="flex-1 w-3/4">
           <h1 className="text-2xl font-semibold">Trending blogs</h1>

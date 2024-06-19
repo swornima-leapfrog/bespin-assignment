@@ -120,22 +120,31 @@ export class FriendsService {
   }
 
   async searchByuserName(currentUserId: number, username: string) {
-    const userFriendsPromise = this.getAllFriends(currentUserId);
-    const searchedUserPromise = this.usersService.searchByUserName(username);
+    const sentRequestsPromise = this.getSentRequests(currentUserId);
+    const getRequestsPromise = this.getRequests(currentUserId);
+    const searchedUserPromise = this.usersService.searchByUserName(
+      username,
+      currentUserId,
+    );
 
-    const [userFriends, searchedUser] = await Promise.all([
-      userFriendsPromise,
+    const [sentRequests, getRequests, searchedUser] = await Promise.all([
+      sentRequestsPromise,
+      getRequestsPromise,
       searchedUserPromise,
     ]);
 
     return searchedUser.map((searchedUser) => {
-      const friend = userFriends.find(
-        (friend) => friend.id === searchedUser.id,
+      const sentRequest = sentRequests.find(
+        (request) => request.id === searchedUser.id,
+      );
+
+      const getRequest = getRequests.find(
+        (request) => request.id === searchedUser.id,
       );
 
       return {
         ...searchedUser,
-        isFriend: friend ? true : false,
+        sentRequest: sentRequest || getRequest ? true : false,
       };
     });
   }

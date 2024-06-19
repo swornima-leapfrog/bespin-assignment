@@ -22,7 +22,9 @@ function Navbar() {
     <>
       <nav className="bg-slate-700 text-white py-4 px-44">
         <div className="flex justify-between">
-          <h2 className="text-2xl font-bold">Socio</h2>
+          <h2 className="text-2xl font-bold">
+            <Link to="/home">Socio</Link>
+          </h2>
           <div className="flex gap-8 items-center">
             <Link to="/home">Home</Link>
             <Link to="/friends">Friends</Link>

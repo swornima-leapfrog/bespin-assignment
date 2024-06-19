@@ -36,7 +36,7 @@ export const getSentRequests = async () => {
 };
 
 export const searchByName = async (name: string) => {
-  const { data } = await http.get(`/users/search/${name}`);
+  const { data } = await http.get(`/friends/search/${name}`);
   return data;
 };
 
