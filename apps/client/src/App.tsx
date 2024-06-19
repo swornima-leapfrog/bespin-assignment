@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Home from "./views/Home";
+import Login from "./views/user/Login";
+import Profile from "./views/user/Profile";
+import AddBlog from "./views/Blogs/AddBlog";
+import Register from "./views/user/Register";
+import Friends from "./views/friends/Friends";
+import "react-toastify/dist/ReactToastify.css";
+import Requests from "./views/friends/Requests";
+import { ToastContainer } from "react-toastify";
+import CheckAuth from "./authentication/CheckAuth";
+import RequireAuth from "./authentication/RequireAuth";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const routes = createBrowserRouter([
+    {
+      element: <CheckAuth />,
+      children: [
+        {
+          path: "/register",
+          element: <Register />
+        },
+        {
+          path: "/login",
+          element: <Login />
+        }
+      ]
+    },
+    {
+      element: <RequireAuth />,
+      children: [
+        {
+          path: "/",
+          element: <Home />
+        },
+        {
+          path: "/home",
+          element: <Home />
+        },
+        {
+          path: "/friends",
+          element: <Friends />
+        },
+        {
+          path: "/requests",
+          element: <Requests />
+        },
+        {
+          path: "/profile/:id",
+          element: <Profile />
+        },
+        {
+          path: "/blogs/add",
+          element: <AddBlog />
+        },
+        { path: "/*", element: <Home /> }
+      ]
+    }
+  ]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <RouterProvider router={routes} />
+      <ToastContainer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

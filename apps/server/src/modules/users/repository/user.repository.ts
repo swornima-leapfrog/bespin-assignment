@@ -72,4 +72,12 @@ export class UserRepository extends BaseRepository {
 
     return this.execute(traversal);
   }
+
+  searchByUserName(username: string) {
+    const g = this.gremlinService.getClient();
+
+    const traversal = g.V().has(this.vertexLabel, 'username', username);
+
+    return this.execute<GetUserDto>(traversal);
+  }
 }

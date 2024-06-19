@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -14,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { JwtGuard } from '../auth/guard/auth.jwt.guard';
+import { AuthRequest } from '@/interfaces/authenticate-request.interface';
 
 @Controller('users')
 export class UsersController {
@@ -35,6 +37,12 @@ export class UsersController {
   @Get()
   getUsers() {
     return this.userService.getUsers();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/me')
+  getMe(@Request() req: AuthRequest) {
+    return this.userService.getUserById(req.user.id);
   }
 
   @UseGuards(JwtGuard)

@@ -4,6 +4,4 @@ export class GetBlogDto {
   title: string;
 
   content: string;
-
-  imageUrl: string;
 }

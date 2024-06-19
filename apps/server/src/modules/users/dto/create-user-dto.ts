@@ -14,5 +14,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
-  imageUrl: string;
+  @IsNotEmpty()
+  @IsString()
+  contactNumber: string;
 }

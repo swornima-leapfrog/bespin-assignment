@@ -1,3 +1,4 @@
+import { GetUserDto } from '@/modules/users/dto/get-user-dto';
 import { UserRepository } from '@/modules/users/repository/user.repository';
 import { Injectable } from '@nestjs/common';
 import { process } from 'gremlin';
@@ -13,7 +14,7 @@ export class FriendsRepository {
 
     const traversal = g.V(currentUserId).both('isFriendWith');
 
-    return this.userRepository.execute(traversal);
+    return this.userRepository.execute<GetUserDto>(traversal);
   }
 
   async friendRequestExists(currentUserId: number, targetUserId: number) {
@@ -47,7 +48,7 @@ export class FriendsRepository {
 
     const traversal = g.V(currentUserId).out('sentFriendRequest');
 
-    return this.userRepository.execute(traversal);
+    return this.userRepository.execute<GetUserDto>(traversal);
   }
 
   getRequests(currentUserId: number) {
@@ -55,7 +56,7 @@ export class FriendsRepository {
 
     const traversal = g.V(currentUserId).in_('sentFriendRequest');
 
-    return this.userRepository.execute(traversal);
+    return this.userRepository.execute<GetUserDto>(traversal);
   }
 
   removeRequest(currentUserId: number, targetUserId: number) {
@@ -101,8 +102,8 @@ export class FriendsRepository {
       .both('isFriendWith')
       .both('isFriendWith')
       .where(statics.not(statics.hasId(currentUserId)))
-      .dedup();
+      .where(statics.not(statics.both('isFriendWith').hasId(currentUserId)));
 
-    return this.userRepository.execute(traversal);
+    return this.userRepository.execute<GetUserDto>(traversal);
   }
 }

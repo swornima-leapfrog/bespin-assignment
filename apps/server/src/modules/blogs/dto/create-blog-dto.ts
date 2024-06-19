@@ -8,6 +8,4 @@ export class CreateBlogDto {
   @IsString()
   @IsNotEmpty()
   content: string;
-
-  imageUrl: string;
 }

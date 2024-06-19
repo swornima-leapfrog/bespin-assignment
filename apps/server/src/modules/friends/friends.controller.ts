@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtGuard } from '../auth/guard/auth.jwt.guard';
 import { AuthRequest } from '@/interfaces/authenticate-request.interface';
 import { FriendsService } from './friends.service';
@@ -48,7 +56,15 @@ export class FriendsController {
   }
 
   @Get('recommend')
-  getRecommendations(@Req() req: AuthRequest) {
+  async getRecommendations(@Req() req: AuthRequest) {
     return this.friendsService.getRecommendations(req.user.id);
+  }
+
+  @Get('search/:username')
+  searchByUsername(
+    @Req() req: AuthRequest,
+    @Param('username') username: string,
+  ) {
+    return this.friendsService.searchByuserName(req.user.id, username);
   }
 }

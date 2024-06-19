@@ -1,11 +1,6 @@
-export class GetUserDto {
-  id: number;
-
+export interface RegisterUser {
   username: string;
-
   email: string;
-
   password: string;
-
   contactNumber: string;
 }

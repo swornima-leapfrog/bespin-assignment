@@ -23,6 +23,8 @@ export class UpdateUserDto {
   @IsOptional()
   password?: string;
 
+  @IsNotEmpty()
+  @IsString()
   @IsOptional()
-  imageUrl?: string;
+  contactNumber: string;
 }

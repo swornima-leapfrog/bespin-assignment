@@ -75,4 +75,8 @@ export class UsersService {
     this.userRepository.deleteUser(id);
     return { message: `User of id ${id} has been deleted` };
   }
+
+  async searchByUserName(username: string) {
+    return this.userRepository.searchByUserName(username);
+  }
 }
